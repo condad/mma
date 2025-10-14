@@ -1,0 +1,13 @@
+Feature,Importance
+prevloans__prev_early_payment_mean,39.197788297393785
+prevloans__prev_delay_mean,15.990519772627149
+scaler__totaldue,6.820088622814889
+categorical__bank_name_clients,5.607209446945587
+prevloans__prev_loan_amt_mean,5.559013434606836
+scaler__termdays,5.537820662131624
+age__age,5.210118117087195
+categorical__employment_status_clients,4.900974140451942
+scaler__latitude_gps,3.7392126501280734
+prevloans__prev_loan_count,2.730982656633902
+scaler__longitude_gps,2.680496222918093
+scaler__loanamount,2.025775976260906

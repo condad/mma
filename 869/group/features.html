@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<style>
+  body {
+    font-family: sans-serif;
+    background: #f9f9f9;
+  }
+  .bubble {
+    font: 12px sans-serif;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: white;
+  }
+</style>
+<svg width="600" height="600"></svg>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+  const data = [
+    {Feature: "prev_early_payment_mean", Importance: 34.755979},
+    {Feature: "prev_delay_mean", Importance: 14.569604},
+    {Feature: "termdays", Importance: 7.311046},
+    {Feature: "totaldue", Importance: 6.443083},
+    {Feature: "employment_status", Importance: 5.329955},
+    {Feature: "latitude", Importance: 5.299033},
+    {Feature: "longitude", Importance: 5.187647},
+    {Feature: "prev_loan_count", Importance: 4.814872},
+    {Feature: "prev_loan_amt_mean", Importance: 4.777163},
+    {Feature: "bank_name_clients", Importance: 4.196895},
+    {Feature: "loanamount", Importance: 3.658396},
+    {Feature: "age", Importance: 3.656327},
+  ];
+
+  const width = 600;
+  const height = 600;
+
+  // Sort to put largest first (to center it)
+  data.sort((a, b) => b.Importance - a.Importance);
+
+  const pack = (data) =>
+    d3.pack().size([width, height]).padding(5)(
+      d3.hierarchy({children: data}).sum((d) => d.Importance)
+    );
+
+  const root = pack(data);
+
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  const svg = d3.select("svg").attr("viewBox", [0, 0, width, height]);
+
+  const node = svg
+    .selectAll("g")
+    .data(root.leaves())
+    .join("g")
+    .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+  node
+    .append("circle")
+    .attr("r", (d) => d.r)
+    .attr("fill", (d, i) => color(i));
+
+  node
+    .append("text")
+    .attr("class", "bubble")
+    .attr("text-anchor", "middle")
+    .selectAll("tspan")
+    .data((d) => {
+      const name = d.data.Feature.length > 30 ? d.data.Feature.slice(0, 30) + "…" : d.data.Feature;
+      const importance = d.data.Importance.toFixed(1);
+      return [name, importance];
+    })
+    .join("tspan")
+    .attr("x", 0)
+    .attr("dy", (d, i) => (i === 0 ? "0.3em" : "1.2em"))
+    .style("font-size", 10)
+    .text((d) => d);
+</script>
